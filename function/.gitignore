@@ -9,6 +9,8 @@ Publish
 *.suo
 *.cscfg
 *.Cache
+cmd
+api
 project.lock.json
 
 /packages
