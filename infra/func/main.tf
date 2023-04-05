@@ -6,15 +6,15 @@ variable "STORAGE_ACC_NAME" {}
 variable "STORAGE_ACC_KEY" {}
 variable "STORAGE_CONNECTION_STRING" {}
 
-resource "azurerm_application_insights" "noise_event_processor_insights" {
-  name                = "noise-event-processor-insights"
+resource "azurerm_application_insights" "noise_event_collector_insights" {
+  name                = "noise-event-collector-insights"
   location            = var.LOCATION
   resource_group_name = var.RESOURCE_GROUP
-  application_type    = "Node.JS"
+  application_type    = "other"
 }
 
 resource "azurerm_app_service_plan" "noise_processor_app_service_plan" {
-  name                = "noise-processor-app-service-plan"
+  name                = "noise-collector-app-service-plan"
   location            = var.LOCATION
   resource_group_name = var.RESOURCE_GROUP
   kind                = "FunctionApp"
@@ -26,14 +26,14 @@ resource "azurerm_app_service_plan" "noise_processor_app_service_plan" {
 }
 
 resource "azurerm_function_app" "noise_event_processor_app" {
-  name                = "noise-event-processor-app"
+  name                = "noise-event-collector-app"
   location            = var.LOCATION
   resource_group_name = var.RESOURCE_GROUP
   app_service_plan_id = azurerm_app_service_plan.noise_processor_app_service_plan.id
   app_settings = {
     FUNCTIONS_WORKER_RUNTIME = "node",
     AzureWebJobsStorage = var.STORAGE_CONNECTION_STRING,
-    APPINSIGHTS_INSTRUMENTATIONKEY = azurerm_application_insights.noise_event_processor_insights.instrumentation_key,
+    APPINSIGHTS_INSTRUMENTATIONKEY = azurerm_application_insights.noise_event_collector_insights.instrumentation_key,
     WEBSITE_RUN_FROM_PACKAGE = "1"
   }
   https_only                 = "true"

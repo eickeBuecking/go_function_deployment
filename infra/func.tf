@@ -21,7 +21,7 @@ resource "azurerm_storage_account" "func_storage_acc" {
 }
 
 resource "azurerm_storage_container" "func_storage_container" {
-  name                  = "func-deployments-event-processor"
+  name                  = "func-deployments-event-collector"
   storage_account_name  = azurerm_storage_account.func_storage_acc.name
   container_access_type = "private"
 
@@ -40,23 +40,3 @@ module "func" {
   depends_on = [azurerm_resource_group.func-rg]
 }
 
-resource "azurerm_servicebus_namespace" "service_bus" {
-  name = "noise-event-service-bus"
-  resource_group_name = var.RESOURCE_GROUP
-  location = var.LOCATION
-  sku = "Basic"
-}
-
-resource "azurerm_servicebus_queue" "my_new_queue" {
-  name = "noise_event_queue"
-  namespace_id = azurerm_servicebus_namespace.service_bus.id
-}
-
-resource "azurerm_servicebus_queue_authorization_rule" "new_policy" {
-  name     = "send_rule"
-  queue_id = azurerm_servicebus_queue.my_new_queue.id
-
-  listen = true
-  send   = true
-  manage = false
-}

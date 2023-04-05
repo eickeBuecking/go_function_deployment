@@ -10,7 +10,7 @@ variable "TENANT_ID" {
 
 # GLOBAL VARIABLES
 variable "RESOURCE_GROUP" {
-  default = "noise-event-processor"
+  default = "noise-event-collector"
 }
 variable "LOCATION" {
   default = "northeurope"
