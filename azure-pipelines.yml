@@ -17,7 +17,7 @@ stages:
     - script: |
         echo 'Building the Go app...'
         cd function/cmd
-        GOOS=linux GOARCH=amd64 go build -o ../../api
+        GOOS=linux GOARCH=amd64 go build -o ../api
       displayName: 'Build Go app'
 
     - task: ArchiveFiles@2
