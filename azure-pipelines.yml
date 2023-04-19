@@ -1,0 +1,57 @@
+trigger:
+- main
+
+variables:
+  appName: 'noise-event-collector-app'
+  functionAppName: 'noise-event-collector-app'
+
+stages:
+- stage: Build
+  displayName: 'Build stage'
+  jobs:
+  - job: Build
+    displayName: 'Building'
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - script: |
+        echo 'Building the Go app...'
+        cd function/cmd
+        GOOS=linux GOARCH=amd64 go build -o ../../api
+      displayName: 'Build Go app'
+
+    - task: ArchiveFiles@2
+      inputs:
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/function'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/$(appName).zip'
+        replaceExistingArchive: true
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        artifactName: 'drop'
+        publishLocation: 'Container'
+
+- stage: Deploy
+  displayName: 'Deploy stage'
+  dependsOn: Build
+  condition: succeeded()
+  jobs:
+  - deployment: DeployFunctionApp
+    displayName: 'Deploy Function App'
+    environment: 'production'
+    pool:
+      vmImage: 'ubuntu-latest'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: AzureFunctionApp@1
+            inputs:
+              azureSubscription: '5931c351-a832-45dd-8724-58999f1cec6c'
+              appType: 'functionApp'
+              appName: '$(functionAppName)'
+              package: '$(Pipeline.Workspace)/drop/$(appName).zip'
+              deploymentMethod: 'auto'
