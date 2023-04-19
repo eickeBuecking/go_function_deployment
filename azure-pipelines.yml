@@ -1,5 +1,5 @@
 trigger:
-- main
+- master
 
 variables:
   appName: 'noise-event-collector-app'
@@ -51,7 +51,7 @@ stages:
           - task: AzureFunctionApp@1
             inputs:
               azureSubscription: '5931c351-a832-45dd-8724-58999f1cec6c'
-              appType: 'functionApp'
+              appType: 'functionAppLinux'
               appName: '$(functionAppName)'
               package: '$(Pipeline.Workspace)/drop/$(appName).zip'
               deploymentMethod: 'auto'
