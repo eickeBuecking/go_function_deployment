@@ -13,34 +13,29 @@ resource "azurerm_application_insights" "noise_event_collector_insights" {
   application_type    = "other"
 }
 
-resource "azurerm_app_service_plan" "noise_processor_app_service_plan" {
+resource "azurerm_service_plan" "noise_processor_app_service_plan" {
   name                = "noise-collector-app-service-plan"
   location            = var.LOCATION
   resource_group_name = var.RESOURCE_GROUP
-  kind                = "FunctionApp"
-  reserved = true
-  sku {
-    tier = "Dynamic"
-    size = "Y1"
-  }
+  os_type = "Linux"
+  sku_name = "Y1"
 }
 
-resource "azurerm_function_app" "noise_event_processor_app" {
+resource "azurerm_linux_function_app" "noise_event_processor_app" {
   name                = "noise-event-collector-app"
   location            = var.LOCATION
   resource_group_name = var.RESOURCE_GROUP
   app_service_plan_id = azurerm_app_service_plan.noise_processor_app_service_plan.id
   app_settings = {
-    FUNCTIONS_WORKER_RUNTIME = "node",
+    FUNCTIONS_WORKER_RUNTIME = "custom",
     AzureWebJobsStorage = var.STORAGE_CONNECTION_STRING,
     APPINSIGHTS_INSTRUMENTATIONKEY = azurerm_application_insights.noise_event_collector_insights.instrumentation_key,
     WEBSITE_RUN_FROM_PACKAGE = "1"
   }
   https_only                 = "true"
-  os_type                    = "linux"
   storage_account_name       = var.STORAGE_ACC_NAME
   storage_account_access_key = var.STORAGE_ACC_KEY
-  version                    = "~3"
+  version                    = "~4"
 
   lifecycle {
     ignore_changes = [
