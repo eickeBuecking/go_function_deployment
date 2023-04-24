@@ -27,7 +27,7 @@ resource "azurerm_linux_function_app" "noise_event_processor_app" {
   resource_group_name = var.RESOURCE_GROUP
   service_plan_id = azurerm_service_plan.noise_processor_app_service_plan.id
   app_settings = {
-    FUNCTIONS_WORKER_RUNTIME = "custom",
+    //FUNCTIONS_WORKER_RUNTIME = "Custom",
     AzureWebJobsStorage = var.STORAGE_CONNECTION_STRING,
     APPINSIGHTS_INSTRUMENTATIONKEY = azurerm_application_insights.noise_event_collector_insights.instrumentation_key,
     WEBSITE_RUN_FROM_PACKAGE = "1"
