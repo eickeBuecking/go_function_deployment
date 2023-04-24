@@ -25,7 +25,7 @@ resource "azurerm_linux_function_app" "noise_event_processor_app" {
   name                = "noise-event-collector-app"
   location            = var.LOCATION
   resource_group_name = var.RESOURCE_GROUP
-  app_service_plan_id = azurerm_app_service_plan.noise_processor_app_service_plan.id
+  service_plan_id = azurerm_service_plan.noise_processor_app_service_plan.id
   app_settings = {
     FUNCTIONS_WORKER_RUNTIME = "custom",
     AzureWebJobsStorage = var.STORAGE_CONNECTION_STRING,
@@ -35,7 +35,6 @@ resource "azurerm_linux_function_app" "noise_event_processor_app" {
   https_only                 = "true"
   storage_account_name       = var.STORAGE_ACC_NAME
   storage_account_access_key = var.STORAGE_ACC_KEY
-  version                    = "~4"
 
   lifecycle {
     ignore_changes = [
