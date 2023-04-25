@@ -30,7 +30,10 @@ resource "azurerm_linux_function_app" "noise_event_processor_app" {
     //FUNCTIONS_WORKER_RUNTIME = "Custom",
     AzureWebJobsStorage = var.STORAGE_CONNECTION_STRING,
     APPINSIGHTS_INSTRUMENTATIONKEY = azurerm_application_insights.noise_event_collector_insights.instrumentation_key,
-    WEBSITE_RUN_FROM_PACKAGE = "1"
+    WEBSITE_RUN_FROM_PACKAGE = "1",
+    SCM_DO_BUILD_DURING_DEPLOYMENT: "true",
+    ENABLE_ORYX_BUILD: "true",
+    FUNCTIONS_WORKER_RUNTIME="custom"
   }
   https_only                 = "true"
   storage_account_name       = var.STORAGE_ACC_NAME
