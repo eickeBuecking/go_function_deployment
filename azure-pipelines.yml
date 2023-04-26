@@ -1,3 +1,5 @@
+#Deployment seems not to work for whatever reason. Deploy using VSCode instead.
+
 trigger:
 - master
 
