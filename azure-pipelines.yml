@@ -2,8 +2,8 @@ trigger:
 - master
 
 variables:
-  appName: 'noise-event-collector-app'
-  functionAppName: 'noise-event-collector-app'
+  appName: 'my-noise-event-collector-app'
+  functionAppName: 'my-noise-event-collector-app'
 
 stages:
 - stage: Build
