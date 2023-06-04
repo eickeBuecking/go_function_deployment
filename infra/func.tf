@@ -33,6 +33,7 @@ module "func" {
   source                    = "./func"
   LOCATION                  = var.LOCATION
   RESOURCE_GROUP            = var.RESOURCE_GROUP
+  KEY_VAULT_ID              = var.KEY_VAULT_ID
   STORAGE_ACC_NAME          = azurerm_storage_account.func_storage_acc.name
   STORAGE_ACC_KEY           = azurerm_storage_account.func_storage_acc.primary_access_key
   STORAGE_CONNECTION_STRING = azurerm_storage_account.func_storage_acc.primary_blob_connection_string
